@@ -1,0 +1,24 @@
+output "vpc_id" {
+  value = aws_vpc.myvpc.id
+}
+
+output "sub1" {
+  value = aws_subnet.sub1.id
+}
+
+output "sub2" {
+  value = aws_subnet.sub2
+}
+
+output "security_group" {
+  value = aws_security_group.mysg.id
+}
+
+output "instance1_ip" {
+  value = aws_instance.webserver1.public_ip
+}
+
+
+output "instance2_ip" {
+  value = aws_instance.webserver2.public_ip
+}
