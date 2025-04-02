@@ -1,4 +1,4 @@
-# output "loadbalancerdns" {
-#   value = aws_lb.myalb.dns_name
-# }
+ output "loadbalancerdns" {
+   value = aws_lb.myalb.dns_name
+ }
 
