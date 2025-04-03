@@ -1,0 +1,48 @@
+image:
+    name: hashicorp/terraform:latest
+    entrypoint: [""]
+
+variables:
+    AWS_ACCESS_KEY_ID : ${MY_ACCESS_KEY}
+    AWS_SECRET_ACCESS_KEY : ${MY_SECRET_KEY}
+    AWS_DEFAULT_REGION : "eu-central-1"
+
+before_script: # run this command before the pipeline starts
+    - terraform --version #check terraform installed on this image
+    - terraform init # initiaze provider backend
+
+stages:
+    - validate
+    - plan
+    - apply
+    - destroy
+
+#jobs
+validate:
+    stage: validate
+    script:
+        - terraform fmt
+        - terraform validate
+
+plan:
+    stage: plan
+    dependencies: 
+        - validate # only plan if validate is pass
+    script: 
+        - terraform plan -out="plainfile" # plan which created is saved in plainfile
+    artifacts:
+        paths: 
+            - plainfile #is stored and shared between different stages of the pipeline
+
+apply:
+    stage: apply
+    dependencies: 
+        - plan
+    script: 
+        - terraform apply --input=false "plainfile" # pass  the values from the artifact
+    when: manual
+destroy:
+    stage: destroy
+    script:
+        - terraform destroy -auto-approve
+    when: manual
